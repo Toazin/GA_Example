@@ -1,4 +1,4 @@
 var Population = require('./Population.js');
 
-var population = new Population("Send Nudes", 100);
+var population = new Population("Send Nudes", 30);
 population.generation();

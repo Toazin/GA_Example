@@ -1,20 +1,23 @@
-var Gene = require('./Gene.js');
+var Chromosome = require('./Chromosome.js');
 
 var Population = function(goal, size) {
     this.members = [];
     this.goal = goal;
     this.generationNumber = 0;
-    while (size--) {
-        var gene = new Gene();
-        gene.random(this.goal.length);
-        this.members.push(gene);
+
+    this.initialize =function () {
+        while (size--) {
+            var chromosome = new Chromosome();
+            chromosome.random(this.goal.length);
+            this.members.push(chromosome);
+        }
     }
 
     this.display = function () {
         console.log("");
         console.log("Generation: ", this.generationNumber);
         for (var i = 0; i < this.members.length; i++) {
-            console.log("\t " + this.members[i].code + " (" + this.members[i].cost + ")");
+            console.log("\t " + this.members[i].code + " - Cost: " + this.members[i].cost);
         }
     }
 
@@ -25,23 +28,28 @@ var Population = function(goal, size) {
     }
 
     this.generation = function() {
+        //Calculas Costo de tus cromosomas
         for (var i = 0; i < this.members.length; i++) {
             this.members[i].calcCost(this.goal);
-
         }
 
+        //Ordenas por fuerza
         this.sort();
+        //Imprime
         this.display();
+        //Seleccion - Tomas el más cercano
         var children = this.members[0].mate(this.members[1]);
+        //Replazamiento basada en Gym, los mas costos mueres.
         this.members.splice(this.members.length - 2, 2, children[0], children[1]);
 
         for (var i = 0; i < this.members.length; i++) {
             this.members[i].mutate(0.5);
             this.members[i].calcCost(this.goal);
-            if (this.members[i].code == this.goal) {
+            if (this.members[i].code == this.goal) { //Funcion objetivo
                 this.sort();
                 this.display();
-                return true;
+                console.log("Objetivo encontrado: ", this.members[0].code);
+                return this.members;
             }
         }
         this.generationNumber++;
@@ -50,6 +58,8 @@ var Population = function(goal, size) {
             scope.generation();
         }, 20);
     };
+
+    this.initialize();
 };
 
 module.exports = Population;

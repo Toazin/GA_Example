@@ -1,4 +1,4 @@
-var Gene = function(code) {
+var Chromosome = function(code) {
     code ? this.code = code : this.code = '';
     this.cost = 9999;
 
@@ -9,6 +9,7 @@ var Gene = function(code) {
     }
 
     this.mutate = function (chance) {
+        //Mutacion poco tiron, Solo cambiamos UN Gen del chromosoma.
         if (Math.random() > chance) return;
 
         var index = Math.floor(Math.random() * this.code.length);
@@ -23,13 +24,14 @@ var Gene = function(code) {
         this.code = newString;
     }
 
-    this.mate = function (gene) {
+    this.mate = function (chromosome) {
+        //Punto de cruce
         var pivot = Math.round(this.code.length / 2) - 1;
 
-        var child1 = this.code.substr(0, pivot) + gene.code.substr(pivot);
-        var child2 = gene.code.substr(0, pivot) + this.code.substr(pivot);
+        var child1 = this.code.substr(0, pivot) + chromosome.code.substr(pivot);
+        var child2 = chromosome.code.substr(0, pivot) + this.code.substr(pivot);
 
-        return [new Gene(child1), new Gene(child2)];
+        return [new Chromosome(child1), new Chromosome(child2)];
     }
 
     this.calcCost = function (compareTo) {
@@ -42,4 +44,4 @@ var Gene = function(code) {
 
 };
 
-module.exports = Gene;
+module.exports = Chromosome;
