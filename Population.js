@@ -27,6 +27,13 @@ var Population = function(goal, size) {
         });
     }
 
+    this.displayObjective = function () {
+        console.log("--------------------------------------------");
+        console.log("Objetivo encontrado: ", this.members[0].code);
+        console.log("--------------------------------------------");
+        return;
+    }
+
     this.generation = function() {
         //Calculas Costo de tus cromosomas
         for (var i = 0; i < this.members.length; i++) {
@@ -48,7 +55,7 @@ var Population = function(goal, size) {
             if (this.members[i].code == this.goal) { //Funcion objetivo
                 this.sort();
                 this.display();
-                console.log("Objetivo encontrado: ", this.members[0].code);
+                this.displayObjective();
                 return this.members;
             }
         }
